@@ -44,7 +44,7 @@ def main():
                 if asteroid.collides_with(shot):
                     shot.kill()
                     asteroid.split()
-
+  
         screen.blit(pygame.image.load("images/space.png"), (0, 0))
 
         for obj in drawable:

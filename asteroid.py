@@ -9,7 +9,18 @@ class Asteroid(CircleShape):
         super().__init__(x, y, radius)
 
     def draw(self, screen):
-        pygame.draw.circle(screen, "red", self.position, self.radius, 2)
+        vertices = self.get_irregular_vertices(num_vertices=8)
+        pygame.draw.polygon(screen, "red", vertices, 2)
+    
+    def get_irregular_vertices(self, num_vertices=8):
+        vertices = []
+        angle_step = 360 / num_vertices
+        for i in range(num_vertices):
+            angle = i * angle_step
+            offset = random.uniform(0.8, 1.2)
+            vertex = self.position + pygame.Vector2(0, 1).rotate(angle) * self.radius * offset
+            vertices.append((int(vertex.x), int(vertex.y)))
+        return vertices
 
     def update(self, dt):
         self.position += self.velocity * dt
