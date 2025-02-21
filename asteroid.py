@@ -3,7 +3,6 @@ import random
 from constants import *
 from circleshape import CircleShape
 
-
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
         super().__init__(x, y, radius)
@@ -30,15 +29,31 @@ class Asteroid(CircleShape):
 
         if self.radius <= ASTEROID_MIN_RADIUS:
             return
+        
+        # check if there are too many asteroids
+        asteroid_group = Asteroid.containers[0]
+        current_count = len(asteroid_group)
+        if current_count >= ASTEROID_MAX_COUNT:
+            return
 
         # randomize the angle of the split
         random_angle = random.uniform(20, 50)
 
-        a = self.velocity.rotate(random_angle)
-        b = self.velocity.rotate(-random_angle)
+        new_velocity1 = self.velocity.rotate(random_angle)
+        new_velocity2 = self.velocity.rotate(-random_angle)
 
         new_radius = self.radius - ASTEROID_MIN_RADIUS
-        asteroid = Asteroid(self.position.x, self.position.y, new_radius)
-        asteroid.velocity = a * 1.2
-        asteroid = Asteroid(self.position.x, self.position.y, new_radius)
-        asteroid.velocity = b * 1.2
+
+        asteroids_to_spawn = 2
+        if current_count == 99:
+            asteroids_to_spawn = 1
+
+        if asteroids_to_spawn == 2:
+            asteroid1 = Asteroid(self.position.x, self.position.y, new_radius)
+            asteroid1.velocity = new_velocity1 * 1.2
+
+            asteroid2 = Asteroid(self.position.x, self.position.y, new_radius)
+            asteroid2.velocity = new_velocity2 * 1.2
+        elif asteroids_to_spawn == 1:
+            asteroid1 = Asteroid(self.position.x, self.position.y, new_radius)
+            asteroid1.velocity = new_velocity1 * 1.2

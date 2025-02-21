@@ -52,6 +52,9 @@ def main():
                     shot.kill()
                     score += 100 # increase the score
                     asteroid.split()
+                if score > 2000:
+                    print("You win!")
+                    sys.exit()
 
         screen.blit(background, (0, 0)) # draw the background
         
